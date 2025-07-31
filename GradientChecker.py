@@ -24,24 +24,23 @@ class GradientChecker:
         analytical_grad=self.grad(self.X)
         diff=np.linalg.norm(num_grad-analytical_grad)
         print('Computational difference: ', diff)
-#Example 1: grad(trace(A*X)) == A.T  
-m,n=10,20
+#Example 1: grad(trace(X)) == I  
+def func7(X):
+  return np.trace(X)
+def grad7(X):
+  return np.eye(X.shape[0])
+X=np.random.rand(m,m)
+checker7=GradientChecker(func7, grad7, X, eps=1e-6)
+checker7.check()
+#Example 2: grad(trace(A.T*X*B)==A*B.T)
+def func2(X):
+  return np.trace(A.T.dot(X).dot(B))
+def grad2(X):
+  return A.dot(B.T)
 A=np.random.rand(m,n)
-X=np.random.rand(n,m)
-def func1(X):
-    return np.trace(A.dot(X))
-def grad1(X):
-    return A.T
-checker1=GradientChecker(func1, grad1, X)
-checker1.check()
-#Example 2: grad(trace(x.T*A*x)==(A+A.T)*x)
-A=np.random.rand(m,m)
-x=np.random.rand(m,1)
-def func2(x):
-    return x.T.dot(A).dot(x).item()
-def grad2(x):
-    return (A+A.T).dot(x)
-checker2=GradientChecker(func2, grad2, x)
+X=np.random.rand(m,n)
+B=np.random.rand(n,n)
+checker2=GradientChecker(func2, grad2, X, eps=1e-6)
 checker2.check()
 
  
